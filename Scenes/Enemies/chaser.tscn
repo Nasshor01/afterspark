@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=3 uid="uid://btvpn3uaip3xb"]
+
+[ext_resource type="PackedScene" uid="uid://cwswm5ikptew" path="res://Scenes/Enemies/enemy_base.tscn" id="1_r1j4b"]
+[ext_resource type="Script" uid="uid://bggqebqqj8cce" path="res://Scenes/Enemies/chaser.gd" id="2_y5icu"]
+
+[node name="EnemyBase" instance=ExtResource("1_r1j4b")]
+script = ExtResource("2_y5icu")
+
+[node name="Sprite2D" parent="." index="1"]
+scale = Vector2(0.16, 0.16)

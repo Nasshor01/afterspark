@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://dhh112ijp71ab"]
+
+[ext_resource type="Texture2D" uid="uid://wtdjd1iavxic" path="res://icon.svg" id="1_i3y3p"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ejpig"]
+radius = 150.0
+
+[node name="ReigniteZone" type="Area2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ejpig")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.647059, 0, 1)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_i3y3p")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(1, 0.647059, 0, 1)
+energy = 2.0
+texture_scale = 3.0
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 64
+
+[node name="DurationTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="DamageTimer" type="Timer" parent="."]
+wait_time = 0.5

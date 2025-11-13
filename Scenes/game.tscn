@@ -1,0 +1,43 @@
+[gd_scene load_steps=6 format=3 uid="uid://42afdr133pyc"]
+
+[ext_resource type="Script" uid="uid://w8qfka80k2a8" path="res://Scripts/game_controller.gd" id="1_wrm1d"]
+[ext_resource type="PackedScene" uid="uid://dsfsyeybbswap" path="res://Scenes/Player/player.tscn" id="2_3dryh"]
+[ext_resource type="Script" uid="uid://dxme4lcm4id0q" path="res://Scripts/enemy_spawner.gd" id="3_3dryh"]
+[ext_resource type="PackedScene" uid="uid://del46i0ynsnyt" path="res://Scenes/UI/hud.tscn" id="3_wowpa"]
+
+[sub_resource type="Environment" id="Environment_i6g32"]
+background_mode = 3
+glow_enabled = true
+glow_hdr_threshold = 1.2
+
+[node name="Game" type="Node2D"]
+
+[node name="GameController" type="Node" parent="."]
+script = ExtResource("1_wrm1d")
+
+[node name="Camera2D" type="Camera2D" parent="GameController"]
+zoom = Vector2(1.5, 1.5)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_i6g32")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0.545098, 1)
+
+[node name="Player" parent="." instance=ExtResource("2_3dryh")]
+
+[node name="EnemySpawner" type="Node2D" parent="."]
+script = ExtResource("3_3dryh")
+
+[node name="SpawnTimer" type="Timer" parent="EnemySpawner"]
+wait_time = 3.0
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="CanvasLayer" instance=ExtResource("3_wowpa")]

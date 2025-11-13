@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://dsfsyeybbswap"]
+
+[ext_resource type="Script" uid="uid://dsgf2m3h6rikc" path="res://Scenes/Player/player.gd" id="1_a3d8c"]
+[ext_resource type="Texture2D" uid="uid://wtdjd1iavxic" path="res://icon.svg" id="2_xpcdj"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mtuoh"]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_htcer"]
+radius = 16.0
+
+[node name="Player" type="CharacterBody2D" groups=["player"]]
+script = ExtResource("1_a3d8c")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_mtuoh")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(0, 1, 1, 1)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_xpcdj")
+
+[node name="PointLight2D" type="PointLight2D" parent="."]
+color = Color(0, 1, 1, 1)
+energy = 1.5
+texture_scale = 2.0
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+amount = 32
+lifetime = 0.5
+
+[node name="ShootTimer" type="Timer" parent="."]
+wait_time = 0.15
+one_shot = true
+
+[node name="Area2D" type="Area2D" parent="."]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_htcer")
