@@ -60,7 +60,7 @@ func spawn_wave() -> void:
 	wave_spawned.emit(wave_number)
 	
 	# Počet nepřátel se zvyšuje s časem
-	var enemies_per_wave := Globals.BASE_ENEMIES_PER_WAVE + int(wave_number / 5)
+	var enemies_per_wave := Globals.BASE_ENEMIES_PER_WAVE + int(wave_number / 5.0)
 	enemies_per_wave = min(enemies_per_wave, 8)  # Max 8 nepřátel na vlnu
 	
 	for i in range(enemies_per_wave):
