@@ -33,7 +33,7 @@ func setup_game() -> void:
 		setup_player_signals()
 	
 	# Najdi spawner
-	spawner = get_node_or_null("EnemySpawner")
+	spawner = get_node_or_null("../EnemySpawner")
 	
 	# Najdi HUD
 	hud = get_node_or_null("../CanvasLayer/HUD")

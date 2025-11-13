@@ -13,6 +13,7 @@ var energy := Globals.PLAYER_MAX_ENERGY
 var fragments := 0
 var can_shoot := true
 var is_alive := true
+var _initial_sprite_scale: Vector2
 
 @onready var shoot_timer := $ShootTimer
 @onready var sprite := $Sprite2D
@@ -30,6 +31,7 @@ func _ready() -> void:
 	# Setup visual
 	sprite.modulate = Globals.COLOR_PLAYER
 	light.color = Globals.COLOR_PLAYER
+	_initial_sprite_scale = sprite.scale
 	
 	update_visuals()
 
@@ -134,8 +136,8 @@ func update_visuals() -> void:
 
 func flash_effect() -> void:
 	var tween := create_tween()
-	tween.tween_property(sprite, "scale", Vector2(1.2, 1.2), 0.05)
-	tween.tween_property(sprite, "scale", Vector2(1.0, 1.0), 0.1)
+	tween.tween_property(sprite, "scale", _initial_sprite_scale * 1.2, 0.05)
+	tween.tween_property(sprite, "scale", _initial_sprite_scale, 0.1)
 
 func _on_shoot_timer_timeout() -> void:
 	can_shoot = true
