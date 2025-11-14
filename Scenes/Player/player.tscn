@@ -20,14 +20,41 @@ modulate = Color(0, 1, 1, 1)
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("2_xpcdj")
 
+[sub_resource type="Gradient" id="Gradient_s2w7s"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_kqv4q"]
+gradient = SubResource("Gradient_s2w7s")
+
+[sub_resource type="Curve" id="Curve_uiv5h"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_a7j5t"]
+curve = SubResource("Curve_uiv5h")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_n1g44"]
+emission_shape = 1
+emission_sphere_radius = 16.0
+particle_flag_disable_z = true
+gravity = Vector3(0, 20, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_curve = SubResource("CurveTexture_a7j5t")
+color = Color(0.4, 0.8, 1, 1)
+
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0, 1, 1, 1)
 energy = 1.5
+shadow_enabled = true
+texture = SubResource("GradientTexture2D_kqv4q")
 texture_scale = 2.0
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
-amount = 32
-lifetime = 0.5
+amount = 48
+process_material = SubResource("ParticleProcessMaterial_n1g44")
+lifetime = 0.8
+speed_scale = 1.5
 
 [node name="ShootTimer" type="Timer" parent="."]
 wait_time = 0.15

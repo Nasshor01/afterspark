@@ -16,7 +16,7 @@ var is_running := false
 @onready var player: CharacterBody2D = null
 @onready var spawner: Node2D = null
 @onready var hud: Control = null
-@onready var camera: Camera2D = $Camera2D
+@onready var camera: Camera2D = null
 
 # Reignite zone scene
 var reignite_zone_scene := preload("res://Scenes/Effects/reignite_zone.tscn")
@@ -33,14 +33,14 @@ func setup_game() -> void:
 		setup_player_signals()
 	
 	# Najdi spawner
-	spawner = get_node_or_null("EnemySpawner")
+	spawner = get_node_or_null("../EnemySpawner")
 	
 	# Najdi HUD
 	hud = get_node_or_null("../CanvasLayer/HUD")
 	
-	# Setup kamery
+	# Najdi kameru
 	if player:
-		camera.position = Vector2.ZERO
+		camera = player.get_node("Camera2D")
 
 func setup_player_signals() -> void:
 	if player:
