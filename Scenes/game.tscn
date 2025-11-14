@@ -6,30 +6,29 @@
 [ext_resource type="PackedScene" uid="uid://del46i0ynsnyt" path="res://Scenes/UI/hud.tscn" id="3_wowpa"]
 
 [sub_resource type="Environment" id="Environment_i6g32"]
-background_mode = 3
+background_mode = 1
+background_color = Color(0.02, 0.01, 0.05, 1)
 glow_enabled = true
-glow_hdr_threshold = 1.2
+glow_intensity = 0.9
+glow_strength = 1.1
+glow_blend_mode = 0
+glow_hdr_threshold = 0.8
+adjustment_enabled = true
+adjustment_saturation = 1.2
 
 [node name="Game" type="Node2D"]
 
 [node name="GameController" type="Node" parent="."]
 script = ExtResource("1_wrm1d")
 
-[node name="Camera2D" type="Camera2D" parent="GameController"]
-zoom = Vector2(1.5, 1.5)
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_i6g32")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0, 0, 0.545098, 1)
-
 [node name="Player" parent="." instance=ExtResource("2_3dryh")]
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+zoom = Vector2(1.5, 1.5)
+position_smoothing_enabled = true
 
 [node name="EnemySpawner" type="Node2D" parent="."]
 script = ExtResource("3_3dryh")
