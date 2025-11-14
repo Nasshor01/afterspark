@@ -1,13 +1,20 @@
-[gd_scene load_steps=4 format=3 uid="uid://cwswm5ikptew"]
+[gd_scene load_steps=10 format=3 uid="uid://cwswm5ikptew"]
 
-[ext_resource type="Script" uid="uid://bidf4vm1q1pqp" path="res://Scenes/Enemies/enemy_base.gd" id="1_vu4yt"]
-[ext_resource type="Texture2D" uid="uid://wtdjd1iavxic" path="res://icon.svg" id="2_wmxvo"]
+[ext_resource type="Script" path="res://Scenes/Enemies/enemy_base.gd" id="1_vu4yt"]
+[ext_resource type="Shader" path="res://Shaders/silhouette_glitch.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" path="res://Assets/characters/Dark Warriors/160x160/226.png" id="3_texture"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_enemy"]
+shader = ExtResource("2_shader")
+shader_parameter/outline_color = Color(1, 0, 0, 1)
+shader_parameter/glitch_intensity = 0.03
+shader_parameter/outline_width = 1.5
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_b1gup"]
-radius = 12.0
+radius = 16.0
 
 [sub_resource type="Gradient" id="Gradient_w1h1k"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_0u21r"]
 gradient = SubResource("Gradient_w1h1k")
@@ -21,15 +28,15 @@ curve = SubResource("Curve_o22jv")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_j3bvx"]
 emission_shape = 1
-emission_sphere_radius = 12.0
+emission_sphere_radius = 16.0
 particle_flag_disable_z = true
 gravity = Vector3(0, 0, 0)
 orbit_velocity_min = 0.0
 orbit_velocity_max = 0.0
-damping_min = 5.0
-damping_max = 10.0
+damping_min = 10.0
+damping_max = 15.0
 scale_curve = SubResource("CurveTexture_e2b2u")
-color = Color(1, 0.3, 0.3, 1)
+color = Color(1, 0.1, 0.1, 0.8)
 
 [node name="EnemyBase" type="Area2D" groups=["enemy"]]
 script = ExtResource("1_vu4yt")
@@ -38,17 +45,18 @@ script = ExtResource("1_vu4yt")
 shape = SubResource("CircleShape2D_b1gup")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-modulate = Color(1, 0, 0, 1)
-scale = Vector2(0.18, 0.18)
-texture = ExtResource("2_wmxvo")
+material = SubResource("ShaderMaterial_enemy")
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("3_texture")
 
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(1, 0, 0, 1)
-energy = 0.6
+energy = 0.8
 shadow_enabled = true
+shadow_color = Color(0.0901961, 0.0196078, 0.0196078, 0)
 texture = SubResource("GradientTexture2D_0u21r")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
-amount = 32
+amount = 48
 process_material = SubResource("ParticleProcessMaterial_j3bvx")
-lifetime = 0.6
+lifetime = 0.7

@@ -1,20 +1,56 @@
-[gd_scene load_steps=6 format=3 uid="uid://42afdr133pyc"]
+[gd_scene load_steps=12 format=3 uid="uid://42afdr133pyc"]
 
-[ext_resource type="Script" uid="uid://w8qfka80k2a8" path="res://Scripts/game_controller.gd" id="1_wrm1d"]
-[ext_resource type="PackedScene" uid="uid://dsfsyeybbswap" path="res://Scenes/Player/player.tscn" id="2_3dryh"]
-[ext_resource type="Script" uid="uid://dxme4lcm4id0q" path="res://Scripts/enemy_spawner.gd" id="3_3dryh"]
-[ext_resource type="PackedScene" uid="uid://del46i0ynsnyt" path="res://Scenes/UI/hud.tscn" id="3_wowpa"]
+[ext_resource type="Script" path="res://Scripts/game_controller.gd" id="1_wrm1d"]
+[ext_resource type="PackedScene" path="res://Scenes/Player/player.tscn" id="2_3dryh"]
+[ext_resource type="Script" path="res://Scripts/enemy_spawner.gd" id="3_3dryh"]
+[ext_resource type="PackedScene" path="res://Scenes/UI/hud.tscn" id="3_wowpa"]
+[ext_resource type="Shader" path="res://Shaders/background_noise.gdshader" id="5_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_background"]
+shader = ExtResource("5_shader")
+shader_parameter/background_color = Color(0.01, 0.01, 0.02, 1)
+shader_parameter/noise_scale = 30.0
+shader_parameter/noise_speed = 0.03
 
 [sub_resource type="Environment" id="Environment_i6g32"]
-background_mode = 1
-background_color = Color(0.02, 0.01, 0.05, 1)
+background_mode = 2
+background_canvas_max_layer = 1
 glow_enabled = true
-glow_intensity = 0.9
-glow_strength = 1.1
+glow_intensity = 1.2
+glow_strength = 1.3
 glow_blend_mode = 0
-glow_hdr_threshold = 0.8
+glow_hdr_threshold = 0.7
 adjustment_enabled = true
-adjustment_saturation = 1.2
+adjustment_saturation = 1.3
+
+[sub_resource type="Gradient" id="Gradient_ambient"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_ambient"]
+gradient = SubResource("Gradient_ambient")
+
+[sub_resource type="Curve" id="Curve_ambient_scale"]
+_data = [Vector2(0, 0.2), 0.0, 0.0, 0, 0, Vector2(0.5, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.2), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ambient_scale"]
+curve = SubResource("Curve_ambient_scale")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ambient"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(800, 500, 1)
+direction = Vector3(0, -1, 0)
+spread = 20.0
+gravity = Vector3(0, -5, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 15.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_ambient_scale")
+color = Color(0.5, 0.6, 1, 0.1)
 
 [node name="Game" type="Node2D"]
 
@@ -24,7 +60,25 @@ script = ExtResource("1_wrm1d")
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_i6g32")
 
+[node name="Background" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_background")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="AmbientParticles" type="GPUParticles2D" parent="."]
+amount = 256
+process_material = SubResource("ParticleProcessMaterial_ambient")
+texture = SubResource("GradientTexture2D_ambient")
+lifetime = 12.0
+preprocess = 12.0
+randomness = 1.0
+
 [node name="Player" parent="." instance=ExtResource("2_3dryh")]
+z_index = 1
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(1.5, 1.5)

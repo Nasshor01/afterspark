@@ -13,12 +13,11 @@ var energy := Globals.PLAYER_MAX_ENERGY
 var fragments := 0
 var can_shoot := true
 var is_alive := true
-var _initial_sprite_scale: Vector2
 
 @onready var shoot_timer := $ShootTimer
-@onready var sprite := $Sprite2D
 @onready var collision := $CollisionShape2D
-@onready var particles := $GPUParticles2D
+@onready var orb_particles := $OrbParticles
+@onready var trail_particles := $TrailParticles
 @onready var light := $PointLight2D
 
 # Bullet scene
@@ -29,10 +28,7 @@ func _ready() -> void:
 	shoot_timer.timeout.connect(_on_shoot_timer_timeout)
 	
 	# Setup visual
-	sprite.modulate = Globals.COLOR_PLAYER
 	light.color = Globals.COLOR_PLAYER
-	_initial_sprite_scale = sprite.scale
-	
 	update_visuals()
 
 func _physics_process(_delta: float) -> void:
@@ -43,6 +39,12 @@ func _physics_process(_delta: float) -> void:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 	velocity = input_dir * speed
 	move_and_slide()
+
+	# Zapnutí/vypnutí ocasu částic podle pohybu
+	if input_dir.length_squared() > 0:
+		trail_particles.emitting = true
+	else:
+		trail_particles.emitting = false
 	
 	# Střelba
 	if Input.is_action_pressed("shoot") and can_shoot and energy > 0:
@@ -112,9 +114,9 @@ func die() -> void:
 	# Death animation
 	var tween := create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(sprite, "modulate:a", 0.0, 1.0)
 	tween.tween_property(light, "energy", 0.0, 1.0)
-	tween.tween_property(particles, "emitting", false, 0.5)
+	tween.tween_property(orb_particles, "emitting", false, 0.5)
+	tween.tween_property(trail_particles, "emitting", false, 0.2)
 	
 	await tween.finished
 	queue_free()
@@ -122,22 +124,21 @@ func die() -> void:
 func update_visuals() -> void:
 	# Měnící se světlo podle energie
 	var energy_percent := energy / Globals.PLAYER_MAX_ENERGY
-	light.energy = 1.0 + (energy_percent * 0.5)
+	light.energy = 1.2 + (energy_percent * 0.8)
 	
 	# Blikání při nízké energii
 	if energy < Globals.PLAYER_LOW_ENERGY_THRESHOLD:
-		var blink := sin(Time.get_ticks_msec() * 0.01) * 0.3 + 0.7
-		sprite.modulate.a = blink
-	else:
-		sprite.modulate.a = 1.0
+		var blink := sin(Time.get_ticks_msec() * 0.01) * 0.4 + 0.6
+		light.energy *= blink
 	
 	# Velikost světelného kruhu
-	light.texture_scale = energy_percent * 2.0
+	light.texture_scale = 1.5 + (energy_percent * 1.5)
 
 func flash_effect() -> void:
+	# Efekt výstřelu - pulz světla
 	var tween := create_tween()
-	tween.tween_property(sprite, "scale", _initial_sprite_scale * 1.2, 0.05)
-	tween.tween_property(sprite, "scale", _initial_sprite_scale, 0.1)
+	tween.tween_property(light, "energy", light.energy + 0.5, 0.05)
+	tween.tween_property(light, "energy", light.energy, 0.1)
 
 func _on_shoot_timer_timeout() -> void:
 	can_shoot = true
