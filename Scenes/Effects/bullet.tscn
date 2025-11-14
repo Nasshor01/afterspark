@@ -17,9 +17,16 @@ modulate = Color(0, 1, 1, 1)
 scale = Vector2(0.063, 0.063)
 texture = ExtResource("2_prhua")
 
+[sub_resource type="Gradient" id="Gradient_q77t6"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_paf54"]
+gradient = SubResource("Gradient_q77t6")
+
 [node name="PointLight2D" type="PointLight2D" parent="."]
 color = Color(0, 1, 1, 1)
 energy = 0.8
+texture = SubResource("GradientTexture2D_paf54")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 amount = 16
