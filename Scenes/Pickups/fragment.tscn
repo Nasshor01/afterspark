@@ -23,6 +23,6 @@ energy = 0.8
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="."]
 
-[node name="LifetimTimer" type="Timer" parent="."]
+[node name="LifetimeTimer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true

@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://dhh112ijp71ab"]
+[gd_scene load_steps=4 format=3 uid="uid://dhh112ijp71ab"]
 
+[ext_resource type="Script" uid="uid://deakm05sv6ehe" path="res://Scenes/Effects/reignite_zone.gd" id="1_ejpig"]
 [ext_resource type="Texture2D" uid="uid://wtdjd1iavxic" path="res://icon.svg" id="1_i3y3p"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_ejpig"]
 radius = 150.0
 
 [node name="ReigniteZone" type="Area2D"]
+script = ExtResource("1_ejpig")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_ejpig")

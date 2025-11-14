@@ -42,6 +42,8 @@ func setup_game() -> void:
 	if player:
 		camera = player.get_node("Camera2D")
 
+	start_game()
+
 func setup_player_signals() -> void:
 	if player:
 		player.player_died.connect(_on_player_died)

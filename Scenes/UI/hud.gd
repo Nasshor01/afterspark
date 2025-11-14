@@ -24,8 +24,8 @@ func _process(_delta: float) -> void:
 	# Update času
 	if time_label:
 		var time := Globals.game_time
-		var minutes := int(time) / 60
-		var seconds := int(time) % 60
+		var minutes := floori(time / 60)
+		var seconds := floori(time) % 60
 		time_label.text = "TIME: %02d:%02d" % [minutes, seconds]
 	
 	# Update killů
