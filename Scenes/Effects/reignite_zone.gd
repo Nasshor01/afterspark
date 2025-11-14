@@ -6,7 +6,6 @@ var duration := Globals.REIGNITE_DURATION
 var damage_per_sec := Globals.REIGNITE_DAMAGE_PER_SEC
 var radius := Globals.REIGNITE_RADIUS
 
-@onready var sprite := $Sprite2D
 @onready var light := $PointLight2D
 @onready var collision := $CollisionShape2D
 @onready var particles := $GPUParticles2D
@@ -17,7 +16,6 @@ var enemies_in_zone := []
 
 func _ready() -> void:
 	# Setup vizuálu
-	sprite.modulate = Globals.COLOR_REIGNITE
 	light.color = Globals.COLOR_REIGNITE
 	
 	# Nastavení velikosti
@@ -25,8 +23,7 @@ func _ready() -> void:
 	shape.radius = radius
 	collision.shape = shape
 	
-	sprite.scale = Vector2(radius / 50.0, radius / 50.0)
-	light.texture_scale = radius / 100.0
+	light.texture_scale = radius / 50.0 # Větší světlo
 	
 	# Timery
 	timer.wait_time = duration
@@ -61,31 +58,15 @@ func _on_damage_tick() -> void:
 func _on_duration_timeout() -> void:
 	# Fade out
 	var tween := create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(sprite, "modulate:a", 0.0, 0.5)
-	tween.tween_property(light, "energy", 0.0, 0.5)
-	tween.tween_property(sprite, "scale", Vector2(0.1, 0.1), 0.5)
-	
-	particles.emitting = false
+	tween.tween_property(light, "energy", 0.0, 1.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_IN)
 	
 	await tween.finished
 	queue_free()
 
 func spawn_animation() -> void:
-	# Začíná malý
-	sprite.scale = Vector2(0.1, 0.1)
-	sprite.modulate.a = 0.0
-	light.energy = 0.0
+	# Efekt rázové vlny světla
+	light.energy = 4.0 # Počáteční záblesk
+	particles.emitting = true
 	
-	# Expand
 	var tween := create_tween()
-	tween.set_parallel(true)
-	tween.tween_property(sprite, "scale", Vector2(radius / 50.0, radius / 50.0), 0.5)\
-		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-	tween.tween_property(sprite, "modulate:a", 0.6, 0.5)
-	tween.tween_property(light, "energy", 2.0, 0.5)
-
-func _physics_process(delta: float) -> void:
-	# Pulzování
-	var pulse := sin(Time.get_ticks_msec() * 0.003) * 0.2 + 1.0
-	light.energy = pulse * 1.5
+	tween.tween_property(light, "energy", 1.5, 0.8).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
